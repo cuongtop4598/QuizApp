@@ -31,4 +31,6 @@ func GetAuth(c *gin.Context) {
 	if !ok {
 		app.MarkErrors(valid.Errors)
 	}
+
+	authService := auth_service.Auth{Username: username, Password: password}
 }
