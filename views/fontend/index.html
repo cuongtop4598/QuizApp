@@ -1,0 +1,71 @@
+{{define "content"}}
+<section class="d-flex flex-column bg-dark" style="margin-bottom:0;">
+    <header class="text-white">
+
+        <img class="navbar-brand justify-content-center " src="/public/img/ic-logo.png"
+            style="width:100px;font-style: italic;"> Welcome to professional survey Quiz Go language <img
+            class="navbar-brand justify-content-center " src="/public/img/golang.png" style="width:50px;"></img> </img>
+        <nav class="navbar navbar-expand-sm bg-dark">
+
+            <!-- Toggler/collapsibe Button -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse  bg-primary" style="padding-right: 30px;" id="collapsibleNavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white btn-primary" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white btn-primary" href="#">Quiz</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white btn-primary" href="#">Result</a>
+                    </li>
+                    <li class="nav-item d-flex flex-row-reverse">
+                        <a class="nav-link text-white btn-primary" href="#">Account</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container " style="margin-top:30px">
+        <div class="row">
+            <div class="col-sm-6 bg-success text-center ">
+                <h3>Question</h3>
+                <p> Câu {{ .model.ID }}</p>
+                <p class="text-white">{{ .model.Question }}</p>
+            </div> 
+            <div class="col-sm-6 bg-warning">
+                <h3 class="text-center">Answers</h3>
+                {{if .IsOne }}
+                    <ul>
+                        {{range .model.Answer}}
+                        <li style="list-style-type: upper-alpha;">
+                            <p style="padding: left 3px;"> <input name="answer" type="radio"> {{ . }}</p>
+                        </li>
+                        {{ end }}
+                    </ul>
+                {{else}} 
+                    <ul>
+                        {{range .model.Answer}}
+                        <li style="list-style-type: upper-alpha;">
+                            <p style="padding: left 3px;"> <input name="answer" type="checkbox"> {{ . }}</p>
+                        </li>
+                        {{ end }}
+                    </ul>
+                {{end}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-flex justify-content-center" style="margin-top:15px;">
+                <button type="submit" style="width:2cm; margin-right:5px;" class=" btn-danger"> Skip </button>
+                <button type="submit" style="width:2cm; margin-left:5px;" class=" btn-primary"> Save </button>
+            </div>
+        </div>
+    </main>
+</section>
+{{end}}
+
