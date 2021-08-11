@@ -31,41 +31,95 @@
         </nav>
     </header>
 
-    <main class="container " style="margin-top:30px">
+    <main class="container " style="margin-top:30px; margin-bottom:30%">
         <div class="row">
-            <div class="col-sm-6 bg-success text-center ">
-                <h3>Question</h3>
-                <p> Câu {{ .model.ID }}</p>
-                <p class="text-white">{{ .model.Question }}</p>
-            </div> 
+            <div class="col-sm-6 bg-success ">
+                <form method="GET" action="/api/v1/quizzes">
+                    <h3>Question</h3>
+                    {{if .end}}
+                    <p> You have just completed quiz,click "END" button to review results</p>
+                    {{else}}
+                    <p>Câu
+                    <p id="quesNumber">{{ .question.ID }}</p>
+                    </p>
+                    <p class="text-white">{{ .question.Question }}</p>
+                    <input type="hidden" name="currentID" id="currentID" value={{ .question.ID }}>
+                    {{end}}
+                    <input type="hidden" name="id" id="nextQuestion">
+                    <div class="row">
+                        <button id="skip" type="submit" style="width:2cm;" class=" btn-danger" onclick=setNext()> Skip
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+
             <div class="col-sm-6 bg-warning">
-                <h3 class="text-center">Answers</h3>
-                {{if .IsOne }}
+                <form method="GET" action="/api/v1/quizzes/save/">
+                    {{if .end}}
+                    {{else}}
+                    <h3 class="text-center">Answers</h3>
+                    {{if .question.IsOne }}
                     <ul>
-                        {{range .model.Answer}}
+                        {{range .options }}
                         <li style="list-style-type: upper-alpha;">
-                            <p style="padding: left 3px;"> <input name="answer" type="radio"> {{ . }}</p>
+                            <p style="padding: left 3px;"> <input name="answer" type="radio" value={{ .ID }} > {{ .Content }}</p>
                         </li>
                         {{ end }}
                     </ul>
-                {{else}} 
+                    {{else}}
                     <ul>
-                        {{range .model.Answer}}
+                        {{range .options}}
                         <li style="list-style-type: upper-alpha;">
-                            <p style="padding: left 3px;"> <input name="answer" type="checkbox"> {{ . }}</p>
+                            <p style="padding: left 3px;"> <input name="answer{{ .ID }}" type="checkbox"> {{ .Content }}</p>
                         </li>
                         {{ end }}
                     </ul>
+                    {{end}}
+                    <div class="row">
+                        <input type="hidden" name="currentID_s" id="currentID_s" value={{ .question.ID }}>
+                        <button id="save" type="submit" style="width:2cm " class="  btn-primary"> Save
+                        </button>
+                        {{ if .save_success}}
+                        <p>
+                            <script>alert("save success!")</script>
+                        </p>
+                        {{end}}
+                    </div>
+                {{end}}
+                </form>
+            </div>
+
+
+
+
+        </div>
+
+        <div class="row">
+            <div class="d-flex justify-content-center" style="margin-top:15px;">
+                {{if .end}}
+                <form method="GET" action="/api/v1/quizzes/result/">
+                    <button onload=setHiddenButton() id="end" type="submit" style="width:2cm; margin-left:5px;"
+                    class=" btn-danger"> End </button>
+                </form>
+               
                 {{end}}
             </div>
         </div>
-        <div class="row">
-            <div class="d-flex justify-content-center" style="margin-top:15px;">
-                <button type="submit" style="width:2cm; margin-right:5px;" class=" btn-danger"> Skip </button>
-                <button type="submit" style="width:2cm; margin-left:5px;" class=" btn-primary"> Save </button>
-            </div>
-        </div>
     </main>
+    <script type="text/javascript">
+        function setNext() {
+            var id = document.getElementById("quesNumber").innerHTML;
+            var next = document.getElementById("nextQuestion");
+            next.value = parseInt(id) + 1;
+        }
+        function setHiddenButton() {
+            var skip = document.getElementById("skip");
+            skip.setAttribute("type", "hidden");
+            var save = document.getElementById("save");
+            save.setAttribute("save", "hidden");
+        }
+    </script>
 </section>
+{{include "layouts/footer"}}
 {{end}}
-

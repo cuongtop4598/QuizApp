@@ -17,3 +17,19 @@ Build a website that supports Quiz with Go Gin & HTTP2:
 8. Implement audit log for all actions. 
 	
 9. Use MongoDB as database, can use any ORM for query.
+
+
+Mongodb error. 
+
+Just do those two commands for temporary solution:
+
+$ sudo rm -rf /tmp/mongodb-27017.sock
+
+$ sudo service mongod start
+
+For details:
+
+That shall be fault due to user permissions in .sock file, You may have to change the owner to monogdb user.
+
+chown -R mongodb:mongodb /var/lib/mongodb
+chown mongodb:mongodb /tmp/mongodb-27017.sock

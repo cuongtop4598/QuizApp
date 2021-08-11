@@ -30,9 +30,8 @@ github.com/go-stack/stack
 github.com/golang/protobuf/proto
 # github.com/golang/snappy v0.0.1
 github.com/golang/snappy
-# github.com/joho/godotenv v1.3.0
+# github.com/gopherjs/gopherjs v0.0.0-20181103185306-d547d1d9531e
 ## explicit
-github.com/joho/godotenv
 # github.com/json-iterator/go v1.1.10
 github.com/json-iterator/go
 # github.com/klauspost/compress v1.9.5
@@ -58,6 +57,8 @@ github.com/shiena/ansicolor
 # github.com/sirupsen/logrus v1.4.2
 ## explicit
 github.com/sirupsen/logrus
+# github.com/smartystreets/assertions v0.0.0-20190116191733-b6c0e53d7304
+## explicit
 # github.com/smartystreets/goconvey v1.6.4
 ## explicit
 # github.com/ugorji/go/codec v1.1.7

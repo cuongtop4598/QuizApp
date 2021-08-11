@@ -38,12 +38,9 @@ type Server struct {
 var ServerSetting = &Server{}
 
 type Database struct {
-	Type        string
-	User        string
-	Password    string
-	Host        string
-	Name        string
-	TablePrefix string
+	Type   string
+	Host   string
+	DBName string
 }
 
 var DatabaseSetting = &Database{}
@@ -64,9 +61,9 @@ var cfg *ini.File
 
 func Setup() {
 	var err error
-	cfg, err = ini.Load("conf/app.ini")
+	cfg, err = ini.Load("/home/cuongtop/Desktop/Golang/src/github.com/cuongtop4598/QuizWithGo/QuizApp/config/app.ini")
 	if err != nil {
-		log.Fatalf("setting.Setup, fail to parse 'conf/app.ini: %v", err)
+		log.Fatalf("setting.Setup, fail to parse 'config/app.ini: %v", err)
 	}
 	mapTo("app", AppSetting)
 	mapTo("server", ServerSetting)

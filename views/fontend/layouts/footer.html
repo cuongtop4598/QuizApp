@@ -2,12 +2,71 @@
 <footer class="text-white " style="margin-bottom:50px; margin-top:20px; position:absolute; bottom:0;margin-left: 40%;">
     <div class="footer-div">
         <ul class="pagination d-flex justify-content-center">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            <li  class="page-item"><a onclick=turnPrevious() id="previous" class="page-link" href="#">Previous</a></li>
+            {{ if .end}}
+            {{else}}
+                <li  class="page-item"><a id="page1" class="page-link" ></a></li>
+                <li  class="page-item"><a id="page2" class="page-link" ></a></li>
+                <li  class="page-item"><a id="page3" class="page-link" ></a></li>
+            {{end}}
+          
+            <li  class="page-item"><a onclick=turnNext() id="next" class="page-link">Next</a></li>
         </ul>
     </div>
-    Copyright &copy {{copy}}
+    <script type="text/javaScript">
+        document.addEventListener("DOMContentLoaded", getQuizByID(), false);
+        function getQuizByID(){
+            var currentQuiz = document.getElementById("quesNumber").innerHTML;
+            var page1 = document.getElementById("page1")
+            var page2 = document.getElementById("page2")
+            var page3 = document.getElementById("page3")
+            page1.innerHTML = parseInt(currentQuiz)
+            page2.innerHTML = parseInt(currentQuiz) + 1 
+            page3.innerHTML = parseInt(currentQuiz) + 2
+            
+            page1.setAttribute("href", "?id=" + page1.innerHTML)
+             
+            page2.setAttribute("href", "?id=" + page2.innerHTML)
+             
+            page3.setAttribute("href",  "?id=" + page3.innerHTML)
+            
+        }
+        function turnPrevious(){
+            var currentQuiz  = document.getElementById("page1").innerHTML;
+            var page1 = document.getElementById("page1")
+            var page2 = document.getElementById("page2")
+            var page3 = document.getElementById("page3")
+            if (parseInt(currentQuiz) >= 2) {
+                page1.innerHTML = parseInt(currentQuiz) - 1
+                page2.innerHTML = parseInt(currentQuiz)  
+                page3.innerHTML = parseInt(currentQuiz) + 1
+                
+                page1.setAttribute("href",  page1.innerHTML)
+                
+                page2.setAttribute("href",  page2.innerHTML)
+                
+                page3.setAttribute("href", page3.innerHTML)
+            } 
+            
+        }
+        function turnNext(){
+         
+            var currentQuiz = document.getElementById("quesNumber").innerHTML;
+            if (parseInt(currentQuiz) != NaN) {
+                var page1 = document.getElementById("page1")
+                var page2 = document.getElementById("page2")
+                var page3 = document.getElementById("page3")
+                page1.innerHTML = parseInt(currentQuiz) + 1 
+                page2.innerHTML = parseInt(currentQuiz) + 2 
+                page3.innerHTML = parseInt(currentQuiz) + 3
+                
+                page1.setAttribute("href",  page1.innerHTML)
+                
+                page2.setAttribute("href",  page2.innerHTML)
+                
+                page3.setAttribute("href",   page3.innerHTML)
+            }
+           
+        }
+    </script>
 </footer>

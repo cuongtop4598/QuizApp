@@ -1,12 +1,13 @@
 package main
 
 import (
-	"html/template"
-	"log"
+	"fmt"
 	"net/http"
-	"time"
 
-	gintemplate "github.com/foolin/gin-template"
+	"github.com/cuongtop4598/QuizWithGo/QuizApp/pkg/logging"
+	"github.com/cuongtop4598/QuizWithGo/QuizApp/pkg/setting"
+	"github.com/cuongtop4598/QuizWithGo/QuizApp/pkg/util"
+	"github.com/cuongtop4598/QuizWithGo/QuizApp/routers"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/net/http2"
 )
@@ -19,66 +20,32 @@ type Quiz struct {
 	Result   int
 }
 
+func init() {
+	setting.Setup()
+	logging.Setup()
+	util.Setup()
+}
+
 func main() {
-	router := gin.Default()
+
+	gin.SetMode(setting.ServerSetting.RunMode)
+	routersInit := routers.InitRouter()
+	readTimeout := setting.ServerSetting.ReadTimeout
+	writeTimeout := setting.ServerSetting.WriteTimeout
+	endPoint := fmt.Sprintf(":%d", setting.ServerSetting.HttpPort)
+	maxHeaderBytes := 1 << 20
 
 	// config server
-	httpServer := http.Server{
-		Addr:    ":8080",
-		Handler: router,
+	server := http.Server{
+		Addr:           endPoint,
+		Handler:        routersInit,
+		ReadTimeout:    readTimeout,
+		WriteTimeout:   writeTimeout,
+		MaxHeaderBytes: maxHeaderBytes,
 	}
 	var http2Server = http2.Server{}
-	_ = http2.ConfigureServer(&httpServer, &http2Server)
+	_ = http2.ConfigureServer(&server, &http2Server)
 
-	// new template engine
-	router.HTMLRender = gintemplate.New(gintemplate.TemplateConfig{
-		Root:      "views/fontend",
-		Extension: ".html",
-		Master:    "layouts/master",
-		Partials:  []string{"partials/ad"},
-		Funcs: template.FuncMap{
-			"copy": func() string {
-				return time.Now().Format("2006")
-			},
-		},
-		DisableCache: true,
-	})
-
-	router.Static("/public", "./public")
-
-	router.GET("/", func(ctx *gin.Context) {
-		if pusher := ctx.Writer.Pusher(); pusher != nil {
-			// Push is supported
-			options := &http.PushOptions{
-				Header: http.Header{
-					"Accept-Encoding": ctx.Request.Header["Accept-Encoding"],
-				},
-			}
-			err := pusher.Push("/public/img/ic-logo.png", options)
-			if err != nil {
-				log.Fatal(err)
-			}
-			data := Quiz{
-				ID:       1,
-				Question: "Có ai yêu tôi không?",
-				IsOne:    false,
-				Answer:   []string{"Có", "Không", "Có hoặc không", "Vinh yêu Cường", "Thịnh yêu Hiếu"},
-				Result:   1,
-			}
-			gintemplate.HTML(ctx, http.StatusOK, "index", gin.H{
-				"title": "Quiz",
-				"model": data,
-			})
-		} else {
-			ctx.JSON(http.StatusOK, gin.H{
-				"status": "not support server push",
-			})
-		}
-
-	})
-	router.GET("/login", func(ctx *gin.Context) {
-		ctx.HTML(http.StatusOK, "login.html", gin.H{})
-	})
-
-	log.Fatal(httpServer.ListenAndServeTLS("./server.crt", "./server.key"))
+	//log.Fatal(server.ListenAndServeTLS("./server.crt", "./server.key"))
+	server.ListenAndServe()
 }

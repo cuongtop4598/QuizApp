@@ -1,0 +1,20 @@
+[
+    {
+        "id" : 1,
+        "quizid": 1,
+        "question": "how to solve this problem A",
+        "isone": true
+    },
+    {
+        "id" : 2,
+        "quizid": 1,
+        "question": "how to solve this problem B",
+        "isone": false
+    },
+    {
+        "id" : 3,
+        "quizid": 1,
+        "question": "how to solve this problem C",
+        "isone": true
+    }
+]
